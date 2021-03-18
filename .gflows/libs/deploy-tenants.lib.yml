@@ -1,0 +1,29 @@
+#@ load("@ytt:data", "data")
+#@ load("workflows.lib.yml", "job_name_from_slug")
+---
+#@ def deploy_steps(deploy, tenant):
+  if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  runs-on: #@ deploy.runner
+  needs:
+    - version
+  name: #@ "Deploy to {}".format(tenant.name)
+  steps:
+  - name: Checkout tokens repository
+    uses: actions/checkout@v2
+    with:
+      repository: #@ deploy.repository.url
+      ref: #@ deploy.repository.branch
+      token: #@ deploy.repository.token
+      path: configs
+  - name: Configure AWS
+    run: #@ "printf  '{}' | aws configure".format(deploy.aws_key)
+  - name: Deploy via kubectl
+    run: #@ "kubectl -n default --kubeconfig ./configs/{} set image deployments/{} {}={}".format(tenant.credentials_path, deploy.service, deploy.service, deploy.image)
+  - name: Check deployment
+    run: #@ "kubectl -n default --kubeconfig ./configs/{} rollout status deployments/{}".format(deploy.service,deploy.service)
+#@ end
+---
+
+#@ def get_deployment_job_name(tenant):
+#@ return job_name_from_slug(tenant,"deploy-")
+#@ end

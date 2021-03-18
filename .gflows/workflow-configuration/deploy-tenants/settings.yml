@@ -1,0 +1,32 @@
+#@data/values
+---
+deploy:
+  runner: self-hosted
+  triggers:
+    workflows: 
+      - "Build and publish"
+    conditions: 
+      - completed
+    branches:
+      - master
+      - main
+      
+  repository:
+    url: keys_repo
+    branch: master
+    token: ${{ github.token }}
+  aws_key: ${{ secrets.aws_key }}
+  service: covergo-users
+  image: registry-intl.cn-hongkong.aliyuncs.com/covergo/users:${{ needs.version.outputs.app_version }}
+  tenants:
+    - name: tenant name
+      slug: tenant_name
+      credentials_path: tenant_path
+    
+ 
+      
+
+
+
+    
+    

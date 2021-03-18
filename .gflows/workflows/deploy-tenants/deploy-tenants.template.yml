@@ -1,0 +1,46 @@
+#@ load("@ytt:data", "data")
+#@ load("workflows.lib.yml", "pull_request_defaults")
+#@ load("workflows.lib.yml", "checkout_private_actions")
+#@ load("deploy-tenants.lib.yml", "deploy_steps")
+#@ load("deploy-tenants.lib.yml", "get_deployment_job_name")
+#@ load("@ytt:template", "template")
+
+name: Self-Hosted Tenants Deploy
+"on":
+  workflow_run:
+    workflows:
+      #@ for workflow in data.values.deploy.triggers.workflows:
+      - #@ workflow
+      #@ end 
+    types:
+      #@ for condition in data.values.deploy.triggers.conditions:
+      - #@ condition
+      #@ end 
+    branches: 
+      #@ for branch in data.values.deploy.triggers.branches:
+      - #@ branch
+      #@ end
+   
+jobs:
+  version:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    name: Get version from git tag
+    outputs:
+      app_version: ${{ steps.version.outputs.app_version }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - #@ checkout_private_actions()
+    - name: Get jira Ticket slug
+      id: issue-key
+      uses: ./.github/actions/get-issue-key
+    - name: Get version from git tags
+      id: version
+      uses: ./.github/actions/get-version
+
+  #@ for tenant in data.values.deploy.tenants :
+  job: #@ template.replace({get_deployment_job_name(tenant): deploy_steps(data.values.deploy, tenant)})
+  #@ end

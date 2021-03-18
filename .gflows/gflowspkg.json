@@ -1,0 +1,7 @@
+{
+  "name": "deploy-tenants",
+  "files": [
+    "workflows/deploy-tenants/deploy-tenants.template.yml",
+    "libs/deploy-tenants.lib.yml"
+  ]
+}
