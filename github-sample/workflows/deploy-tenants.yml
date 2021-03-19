@@ -35,12 +35,12 @@ jobs:
     - name: Get version from git tags
       id: version
       uses: ./.github/actions/get-version
-  deploy-tenant_name:
+  deploy-rajah_the_cat:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: self-hosted
     needs:
     - version
-    name: Deploy to tenant name
+    name: Deploy to Rajah the cat
     steps:
     - name: Checkout tokens repository
       uses: actions/checkout@v2
@@ -52,8 +52,31 @@ jobs:
     - name: Configure AWS
       run: printf  '${{ secrets.aws_key }}' | aws configure
     - name: Deploy via kubectl
-      run: kubectl -n default --kubeconfig ./configs/tenant_path set image deployments/covergo-users
+      run: kubectl -n default --kubeconfig ./configs/tenant_path/configs set image
+        deployments/covergo-users covergo-users=registry-intl.cn-hongkong.aliyuncs.com/covergo/users:${{
+        needs.version.outputs.app_version }}
+    - name: Check deployment
+      run: kubectl -n default --kubeconfig ./configs/tenant_path/configs rollout status
+        deployments/covergo-users
+  deploy-bonifaciy-the-cat:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
+    needs:
+    - version
+    name: Deploy to Bonifaciy the cat
+    steps:
+    - name: Checkout tokens repository
+      uses: actions/checkout@v2
+      with:
+        repository: keys_repo
+        ref: master
+        token: ${{ github.token }}
+        path: configs
+    - name: Configure AWS
+      run: printf  '${{ secrets.aws_key_2 }}' | aws configure
+    - name: Deploy via kubectl
+      run: kubectl -n default --kubeconfig ./configs/tenant_path2 set image deployments/covergo-users
         covergo-users=registry-intl.cn-hongkong.aliyuncs.com/covergo/users:${{ needs.version.outputs.app_version
         }}
     - name: Check deployment
-      run: kubectl -n default --kubeconfig ./configs/tenant_path rollout status deployments/covergo-users
+      run: kubectl -n default --kubeconfig ./configs/tenant_path2 rollout status deployments/covergo-users

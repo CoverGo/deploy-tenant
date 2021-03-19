@@ -10,23 +10,27 @@ deploy:
     branches:
       - master
       - main
-      
   repository:
     url: keys_repo
     branch: master
-    token: ${{ github.token }}
-  aws_key: ${{ secrets.aws_key }}
+    token: ${{ github.token }}    
+  
   service: covergo-users
   image: registry-intl.cn-hongkong.aliyuncs.com/covergo/users:${{ needs.version.outputs.app_version }}
   tenants:
-    - name: tenant name
-      slug: tenant_name
-      credentials_path: tenant_path
+    - name: Rajah the cat
+      slug: rajah_the_cat
+      credentials_path: tenant_path/configs
+      aws_key: ${{ secrets.aws_key }}
+    - name: Bonifaciy the cat
+      slug: bonifaciy-the-cat
+      credentials_path: tenant_path2
+      aws_key: ${{ secrets.aws_key_2 }}
+
+
+
     
- 
-      
-
-
+    
 
     
     

@@ -16,7 +16,7 @@
       token: #@ deploy.repository.token
       path: configs
   - name: Configure AWS
-    run: #@ "printf  '{}' | aws configure".format(deploy.aws_key)
+    run: #@ "printf  '{}' | aws configure".format(tenant.aws_key)
   - name: Deploy via kubectl
     run: #@ "kubectl -n default --kubeconfig ./configs/{} set image deployments/{} {}={}".format(tenant.credentials_path, deploy.service, deploy.service, deploy.image)
   - name: Check deployment
