@@ -56,5 +56,4 @@ jobs:
         covergo-users=registry-intl.cn-hongkong.aliyuncs.com/covergo/users:${{ needs.version.outputs.app_version
         }}
     - name: Check deployment
-      run: kubectl -n default --kubeconfig ./configs/covergo-users rollout status
-        deployments/covergo-users
+      run: kubectl -n default --kubeconfig ./configs/tenant_path rollout status deployments/covergo-users

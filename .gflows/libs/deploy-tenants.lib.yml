@@ -20,7 +20,7 @@
   - name: Deploy via kubectl
     run: #@ "kubectl -n default --kubeconfig ./configs/{} set image deployments/{} {}={}".format(tenant.credentials_path, deploy.service, deploy.service, deploy.image)
   - name: Check deployment
-    run: #@ "kubectl -n default --kubeconfig ./configs/{} rollout status deployments/{}".format(deploy.service,deploy.service)
+    run: #@ "kubectl -n default --kubeconfig ./configs/{} rollout status deployments/{}".format(tenant.credentials_path, deploy.service)
 #@ end
 ---
 
