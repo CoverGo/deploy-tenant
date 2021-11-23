@@ -7,6 +7,4 @@ templates:
     libs:
       - workflow-configuration/deploy-tenants
       - libs
-    dependencies:
-      - https://raw.githubusercontent.com/CoverGo/ci-workflow-libraries/v1/.gflows
 

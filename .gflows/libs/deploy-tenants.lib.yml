@@ -1,5 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("workflows.lib.yml", "job_name_from_slug")
 ---
 #@ def deploy_steps(deploy, tenant):
   if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -25,5 +24,5 @@
 ---
 
 #@ def get_deployment_job_name(tenant):
-#@ return job_name_from_slug(tenant,"deploy-")
+#@ return "deploy-" + tenant.slug
 #@ end

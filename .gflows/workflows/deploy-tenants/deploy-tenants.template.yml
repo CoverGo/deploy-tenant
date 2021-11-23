@@ -1,6 +1,4 @@
 #@ load("@ytt:data", "data")
-#@ load("workflows.lib.yml", "pull_request_defaults")
-#@ load("workflows.lib.yml", "checkout_private_actions")
 #@ load("deploy-tenants.lib.yml", "deploy_steps")
 #@ load("deploy-tenants.lib.yml", "get_deployment_job_name")
 #@ load("@ytt:template", "template")
@@ -33,7 +31,16 @@ jobs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-    - #@ checkout_private_actions()
+    - name: Checkout GitHub Action Repos
+      uses: daspn/private-actions-checkout@v2
+      with:
+        actions_list: '[
+        "covergo/get-version@v1.4",
+        "covergo/get-issue-key@v1.2",
+        ]'
+        checkout_base_path: ./.github/actions
+        app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
+        app_private_key: ${{ secrets.PRIVATE_ACTION_APP_PRIVATE_KEY }}
     - name: Get jira Ticket slug
       id: issue-key
       uses: ./.github/actions/get-issue-key
