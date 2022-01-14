@@ -36,7 +36,7 @@ jobs:
       with:
         actions_list: '[
         "covergo/get-version@v1.4",
-        "covergo/get-issue-key@v1.2",
+        "covergo/get-issue-key@v1.2"
         ]'
         checkout_base_path: ./.github/actions
         app_id: ${{ secrets.PRIVATE_ACTION_APP_ID }}
