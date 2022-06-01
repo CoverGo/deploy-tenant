@@ -35,7 +35,7 @@ jobs:
       uses: daspn/private-actions-checkout@v2
       with:
         actions_list: '[
-        "covergo/get-version@v1.4",
+        "covergo/get-version@v1.6",
         "covergo/get-issue-key@v1.2"
         ]'
         checkout_base_path: ./.github/actions
