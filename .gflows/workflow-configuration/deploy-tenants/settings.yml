@@ -10,6 +10,8 @@ deploy:
     branches:
       - master
       - main
+    tags:
+      - v*.*
   repository:
     url: keys_repo
     branch: master

@@ -18,6 +18,10 @@ name: Self-Hosted Tenants Deploy
       #@ for branch in data.values.deploy.triggers.branches:
       - #@ branch
       #@ end
+    tags:
+      #@ for tag in data.values.deploy.triggers.tags:
+      - #@ tag
+      #@ end
    
 jobs:
   version:
