@@ -22,6 +22,7 @@ jobs:
     name: Get version from git tag
     outputs:
       app_version: ${{ steps.version.outputs.app_version }}
+      should_deploy: ${{ steps.version_check.outputs.should_deploy }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -43,6 +44,13 @@ jobs:
     - name: Get version from git tags
       id: version
       uses: ./.github/actions/get-version
+    - name: Should deploy check
+      shell: bash
+      id: version_check
+      run: |
+        if [[ ${{ steps.version.outputs.app_version }} =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          echo ::set-output name=should_deploy::true
+        fi
 
   #@ for tenant in data.values.deploy.tenants :
   job: #@ template.replace({get_deployment_job_name(tenant): deploy_steps(data.values.deploy, tenant)})
