@@ -17,7 +17,7 @@ name: Self-Hosted Tenants Deploy
    
 jobs:
   version:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     name: Get version from git tag
     outputs:
